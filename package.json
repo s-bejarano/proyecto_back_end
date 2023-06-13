@@ -1,0 +1,19 @@
+{
+  "name": "tercera_entrega",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Sebastian Bejarano Zarate",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nanoid": "^4.0.2",
+    "nodemon": "^2.0.22"
+  }
+}

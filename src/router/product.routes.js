@@ -11,6 +11,16 @@ const ProductoR = Router()
 ProductoR.get("/", async (req,res)=>{
    
     res.send(await producto.getProducts())
+
+    /*
+    const productos = await producto.getProducts()
+  
+
+    let limit = req.query.limit
+    if (!limit || (limit > 5)) return res.send(productos)
+    let cantidadproductos = productos.filter(productos => productos.id <= limit)
+    res.send({ productos: cantidadproductos })
+    */
 })
 
 ProductoR.get("/:id", async (req,res)=>{

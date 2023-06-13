@@ -12,6 +12,7 @@ CartR.post("/", async (req, res)=> {
 CartR.get('/', async (req, res)=> {
 
     res.send(await carts.read())
+    
 
 })
 

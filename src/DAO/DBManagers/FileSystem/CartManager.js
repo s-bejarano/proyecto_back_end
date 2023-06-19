@@ -9,7 +9,7 @@ class CartManager {
 
     constructor() {
 
-        this.path = "./src/models/cart.json"
+        this.path = "./src/DAO/models/FileSystem/cart.json"
     }
 
 
@@ -66,7 +66,7 @@ class CartManager {
             return "se sumo el producto al carrito"
         }
 
-        let sumadeprodinC = carritoporId.products.push({id:ProductsById.id, cantidad : 1})
+        carritoporId.products.push({id:ProductsById.id, cantidad : 1})
         let cartC = [carritoporId, ...cartfiltro]
       
         await this.write(cartC)

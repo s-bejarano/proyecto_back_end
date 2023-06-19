@@ -10,7 +10,7 @@ class ProductManager {
 
     constructor() {
 
-        this.path = "./src/models/productos.json"
+        this.path = "./src/DAO/models/FileSystem/productos.json"
     }
 
     read = async () => {

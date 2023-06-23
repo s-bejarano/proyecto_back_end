@@ -14,7 +14,7 @@ export default class productManagerM {
         return products.map(product => product.toObject())*/
         try {
 
-            let products = await ProductModel.find()
+            let products = await ProductModel.paginate({category: "super"},{limit:10, page:1})
            return products
         }
         catch (err) {

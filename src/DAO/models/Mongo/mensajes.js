@@ -4,7 +4,7 @@ const mensajeCollection = "mensajes"
 
 const mensajeSchema = new mongoose.Schema({
 
-    usuario: { type: String, require: true },
+       usuario: { type: String, require: true },
     mensaje: { type: String, require: true }
 })
 

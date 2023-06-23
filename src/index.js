@@ -16,8 +16,7 @@ import * as socketio from 'socket.io'
 import  MensajesManagerM from "./DAO/DBManagers/Mongo/mensajes.js"
 const app = express();
 
-//const http = require('http');
-//const socketio = require('socket.io');
+
 
 const server = http.createServer(app);
 const mensajeM = new MensajesManagerM();

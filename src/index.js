@@ -56,17 +56,18 @@ server.listen(8080, ()=>{
 });
 
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
 
     console.log("Nuevo usuario conectado", socket.id);
 
-    socket.on('disconnect', ()=>{
-        console.log("usuario desconectado", socket.id)
+    socket.on('newUser', (user)=> {
+        console.log(`> ${user} ha iniciado sesion`)
     })
 
-    socket.on('chat: message', async (msg) => {
-        await mensajeM.createMensaje(msg)
-        server.emit('messages', await mensajeM.getAll())
+    socket.on('chat:mensaje' , async (msg) => {
+        
+        await mensajeM.createMensaje(msg);
+        io.emit('mensajes', await mensajeM.getAll())
     })
 
     socket.on('newUser', (user)=> {
@@ -75,8 +76,13 @@ io.on('connection', socket => {
 
     socket.on('chat:typing', (data)=> {
 
-        socket.broadcast.emit('chat: typing', data)
+        socket.broadcast.emit('chat:typing', data)
     })
+
+    socket.on('disconnect', ()=>{
+        console.log("usuario desconectado", socket.id)
+    })
+
 
 })
 

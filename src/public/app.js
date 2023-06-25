@@ -2,8 +2,8 @@ const socket = io()
 
 
 
-let username = null
-if(!username){
+let usuario = null
+if(!usuario){
 
     Swal.fire({
         title: "Bienvenido al chat",
@@ -17,40 +17,40 @@ if(!username){
         }
     })
     .then((input) => {
-        username = input.value;
-        socket.emit('newuser', username)
+        usuario = input.value;
+        socket.emit('newUser', usuario)
     })
 }
 
 
 
-const message = document.getElementById('message');
-const btn = document.getElementById('send');
+const message = document.getElementById('mensaje');
+const btn = document.getElementById('enviar');
 const output = document.getElementById('output');
 const actions = document.getElementById('actions');
 
 btn.addEventListener('click', ()=> {
-    socket.emit('chat:message', {
-        username,
-        message: message.value,
+    socket.emit('chat:mensaje', {
+        usuario,
+        mensaje: message.value,
     })
     message.value = '';
 });
 
 
-socket.on('messages', (data) => {
+socket.on('mensajes', (data) => {
 
     actions.innerHTML = '';
     const chatRender = data.map ((msg) => {
-        return `<p><strong>${msg.username}</strong>: ${msg.message}</p>`
+        return `<p><strong>${msg.usuario}</strong>: ${msg.mensaje}</p>`
     }).join(' ')
     output.innerHTML = chatRender
-})
+});
 
-socket.on('newUser', (username)=> {
+socket.on('newUser', (usuario)=> {
 
     Toastify({
-        text: `${username} se ha logeado`,
+        text: `${usuario} se ha logeado`,
         duration: 3000,
         gravity: "top",
         position: "right",
@@ -63,7 +63,7 @@ socket.on('newUser', (username)=> {
 })
 
 message.addEventListener('keypress', () => {
-    socket.emit('chat: typing', username);
+    socket.emit('chat:typing', usuario);
 })
 
 socket.on('chat:typing', (data)=> {

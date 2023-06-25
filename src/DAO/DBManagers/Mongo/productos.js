@@ -1,3 +1,4 @@
+import { query } from "express";
 import { ProductModel } from "../../models/Mongo/productos.js";
 
 export default class productManagerM {
@@ -8,13 +9,16 @@ export default class productManagerM {
     }
 
 
-    getAll = async () => {
+    getAll = async (page, limit) => {
 
         /*let products = await ProductModel.find()
         return products.map(product => product.toObject())*/
         try {
-
-            let products = await ProductModel.paginate({category: "super"},{limit:10, page:1})
+            //let page = req.query.page
+            //let limit = req.query.limit
+            let products = await ProductModel.paginate({page: page, limit:limit})
+            //paginate({category: "super"},{limit:10, page:1})
+            //paginate({page: page , limit: limit })
            return products
         }
         catch (err) {

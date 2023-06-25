@@ -12,8 +12,9 @@ const VistaRealTimeR = Router()
 VistaRealTimeR.get("/", async (req, res)=> {
 
     try {
-
-        let products = await producto.getAll()
+        let page = req.query.page
+        let limit = req.query.limit
+        let products = await producto.getAll(page, limit)
         res.json({result: "succes", payload:  products})
     }
     catch (err) {

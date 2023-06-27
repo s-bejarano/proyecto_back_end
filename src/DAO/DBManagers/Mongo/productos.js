@@ -9,14 +9,23 @@ export default class productManagerM {
     }
 
 
-    getAll = async (page, limit) => {
+    getAll = async (page, limit,category, q) => {
 
         /*let products = await ProductModel.find()
         return products.map(product => product.toObject())*/
         try {
             //let page = req.query.page
-            //let limit = req.query.limit
-            let products = await ProductModel.paginate({page: page, limit:limit})
+            //let limit = req.query.
+            const limitRecords = parseInt(limit);
+            const skip = (page -1) * limit;
+
+            let query = {};
+            if(q) {
+              query = {$text: {$search: q}};
+            }
+            if(category) query.category = category;
+
+            let products = await ProductModel.find(query).limit(limitRecords).skip(skip)
             //paginate({category: "super"},{limit:10, page:1})
             //paginate({page: page , limit: limit })
            return products

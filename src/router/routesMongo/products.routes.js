@@ -12,9 +12,13 @@ const VistaRealTimeR = Router()
 VistaRealTimeR.get("/", async (req, res)=> {
 
     try {
-        let page = req.query.page
-        let limit = req.query.limit
-        let products = await producto.getAll(page, limit)
+        let { limit , page , category, q } = req.query;
+     //   let page = req.query.page
+       // let limit = req.query.limit
+       
+
+
+        let products = await producto.getAll(page ,limit, category, q)
         res.json({result: "succes", payload:  products})
     }
     catch (err) {
@@ -23,16 +27,15 @@ VistaRealTimeR.get("/", async (req, res)=> {
 
 })
 
-/*
-VistaR.get("/", async (req,res) =>{
-    let ProductosT = await producto.getProducts()
-    res.render("home", {
+VistaRealTimeR.get("/", async (req,res) =>{
+    let ProductosT = await producto.getAll()
+    res.render("products", {
 
         tittle: "productos",
         productos: ProductosT
     })
 })
-*/
+
 
 VistaRealTimeR.get("/:id", async (req, res)=> {
 

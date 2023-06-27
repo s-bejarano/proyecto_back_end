@@ -4,24 +4,20 @@ import CartR from "./router/routesFileSystem/cart.routes.js"
 import {engine} from "express-handlebars"
 import * as path from "path"
 import __dirname from "./utils.js";
-import ProductManager from "./DAO/DBManagers/FileSystem/productManager.js";
 import VistaR from "./router/routesFileSystem/vista.routes.js";
 import { Server } from "socket.io"
-import VistaRealTimeR from "./router/routesMongo/realTimeProducts.routes.js";
+import VistaRealTimeR from "./router/routesMongo/products.routes.js";
 import mongoose from "mongoose";
 import VistaCarrito from "../src/router/routesMongo/cart.routes.js"
 import ChatR from "./router/routesMongo/mensajes.js";
 import * as http from 'http'
-import * as socketio from 'socket.io'
 import  MensajesManagerM from "./DAO/DBManagers/Mongo/mensajes.js"
+import productosVista from "../src/router/routesMongo/productos.routes.js";
 const app = express();
-
-
 
 const server = http.createServer(app);
 const mensajeM = new MensajesManagerM();
 const io = new Server(server);
-
 
  mongoose.connect("mongodb+srv://sbejarano:6exZyyAwm4byMnkh@eccomerce.cpjouqp.mongodb.net/?retryWrites=true&w=majority");
 
@@ -47,6 +43,7 @@ app.use("/view",VistaR)
 app.use("/viewR",VistaRealTimeR)
 app.use("/carrito", VistaCarrito)
 app.use("/chatR",ChatR )
+app.use("/productosM", productosVista)
 
 
 server.listen(8080, ()=>{

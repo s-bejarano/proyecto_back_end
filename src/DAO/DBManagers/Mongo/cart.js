@@ -1,5 +1,9 @@
+import { query } from "express"
 import {cartModel} from "../../models/Mongo/cart.js"
+import productManagerM from "../Mongo/productos.js"
 
+
+const productManager = new productManagerM()
 
 export default class CartManagerM {
 
@@ -38,6 +42,74 @@ export default class CartManagerM {
         }
         
     }
+
+    deleteProdinCart = async (cartid,productid) => {
+
+        try {
+            const { products } = await cartModel.findOne(
+                { _id: cartid },
+                {
+                  products: { $elemMatch: { id: productid } },
+                }
+              );
+
+              await cartModel.updateOne(
+                { _id: cartid },
+                {
+                  $pull: { products: { _id: productid } },
+                  //$set: { total: newTotal },
+                }
+              );
+              return products[0];
+        
+            //1const filtro = { _id: cartid}
+          //2const filtro = { _id: cartid, id: productid}
+          //2const update = { $unset: { products: productid}}
+       //1 const update = { $pull: { products: {id: productid}}}
+         // let result = await cartModel.updateOne(filtro, update)
+          //  return result
+        } catch (error) {
+            console.log("no se pudo eliminar el producto del carrito" + error)
+        }
+        
+    }
+    getCartById = async (id) => {
+
+        try {
+            // let id = req.params.id
+             let carrito = await cartModel.findOne({ _id: id})
+             return carrito
+             //res.json({result: "succes", payload:  products})
+         }
+         catch (err) {
+                 console.log("no es posible buscar el carrito")
+         }
+    }
+    addProductInCart = async (cart_id,product) => {
+
+        try {
+            const { products } = await cartModel.findOne(
+              { _id: cart_id },
+              {
+                products: { $elemMatch: { _id: product._id } },
+              }
+            );
+            if (products.length > 0) {
+              await this.deleteProdinCart(cart_id, product._id);
+            }
+            return await cartModel.findByIdAndUpdate(
+              { _id: cart_id },
+              { $push: { products: product } }
+            );
+          } catch (err) {
+         //     throw new Error(err?.message);
+            console.log("no es posible" + err)
+          }
+      
+    }
+
+
+    
 
 }
 

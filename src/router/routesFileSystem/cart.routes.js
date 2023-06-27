@@ -22,7 +22,6 @@ CartR.get('/:id', async (req, res)=> {
 
 })
 
-
 CartR.post('/:cid/products/:pid', async(req, res)=>{
 
     let cartid = req.params.cid
@@ -30,6 +29,7 @@ CartR.post('/:cid/products/:pid', async(req, res)=>{
 
     res.send(await carts.addProdinCart(cartid,productid))
 })
+
 
 
 export default CartR

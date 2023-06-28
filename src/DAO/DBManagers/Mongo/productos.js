@@ -25,7 +25,8 @@ export default class productManagerM {
             }
             if(category) query.category = category;
 
-            let products = await ProductModel.find(query).limit(limitRecords).skip(skip)
+          //  let products = await ProductModel.paginate({page: page , limit: limit })
+            let products = await ProductModel.find(query).limit(limitRecords).skip(skip).lean()
             //paginate({category: "super"},{limit:10, page:1})
             //paginate({page: page , limit: limit })
            return products

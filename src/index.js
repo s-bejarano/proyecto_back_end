@@ -13,6 +13,7 @@ import ChatR from "./router/routesMongo/mensajes.js";
 import * as http from 'http'
 import  MensajesManagerM from "./DAO/DBManagers/Mongo/mensajes.js"
 import productosVista from "../src/router/routesMongo/productos.routes.js";
+import carritoVista from "./router/routesMongo/carrito.routes.js";
 const app = express();
 
 const server = http.createServer(app);
@@ -44,7 +45,7 @@ app.use("/viewR",VistaRealTimeR)
 app.use("/carrito", VistaCarrito)
 app.use("/chatR",ChatR )
 app.use("/productosM", productosVista)
-
+app.use("/carritoM", carritoVista)
 
 server.listen(8080, ()=>{
 

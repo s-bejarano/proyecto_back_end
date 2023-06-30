@@ -3,13 +3,14 @@
     {{#each productos}}
 
 <h2>{{this.title}}</h2>
-<p id="idp">id:{{this.id}}</p>
+<p id="idp">id:{{this._id}}</p>
 <p>descripcion:{{this.description}}</p>
 <p>precio:{{this.price}}</p>
 <p>categoria: {{this.category}}</p>
 <p>stock: {{this.stock}}</p>
-<button id="agregar">Agregar</button>
+<button id="agregar" >Agregar</button>
 {{/each}}
 
 
 </div>
+<script src="./eventosP.js"></script>

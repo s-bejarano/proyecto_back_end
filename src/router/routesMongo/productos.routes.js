@@ -9,7 +9,7 @@ const producto = new productManagerM();
 const productosVista = Router()
 
 productosVista.get("/", async (req,res) =>{
-    let ProductosT = await producto.getAll()
+    let ProductosT = await producto.getAll2()
     res.render("products", {
 
         tittle: "productos",

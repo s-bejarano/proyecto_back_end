@@ -33,6 +33,7 @@ VistaCarrito.post("/:id/products/:pid", async (req, res)=> {
     try {
         let id = req.params.id
         let pid = req.params.pid
+        let cantidad = req.body.cantidad
         //const { params: { id, pid}  } = req.query;
 
         const product = await producto.getByYd(pid)
@@ -41,15 +42,27 @@ VistaCarrito.post("/:id/products/:pid", async (req, res)=> {
             if(!cart) {
                 console.log("carrito no encontrado")
             }
-       
-            const result = await carrito.addProductInCart(id, product)
+           
+                /*
+            const ArrayProducts = cart?.products;
+            const prodInCart = ArrayProducts.find(prod => prod.pid == pid);
+            cantidad = Number(cantidad);
+            const newQuantity = prodInCart.cantidad + cantidad;
+            prodInCart.cantidad = newQuantity;
+
+            ArrayProducts.map(prod =>{
+                if (prod.pid == pid) return prodInCart;
+                return prod;
+            })*/
+
+            const result = await carrito.addProductInCart(id,pid, product,cantidad)
             res.status(201).json({result: "succes", payload: result})
        // const result2 = await cart.createCart(result)
        //  res.status(201).json({result: "succes", payload: result2})
     }
    
     catch (err){
-        console.log("no fue posible añaadir el producto el carrito" + err)
+        console.log("no fue posible añadir el producto el carrito" + err)
     }
 })
 
@@ -92,6 +105,22 @@ VistaCarrito.delete("/:id", async (req, res)=> {
 
     res.send(await carrito.deleteProdinCart(cartid,productid))
 })
+
+VistaCarrito.put("/:cid/products/:pid", async (req, res)=> {
+
+    try {
+        let pid = req.params.pid;
+        let cid = req.params.cid;
+        let productUpdate = req.body;
+
+        let result = await producto.Update({_id: cid, _id: pid}, productUpdate)
+        res.send({status: "succes", payload: result})
+       
+      } catch (error) {
+        console.log("no fue posible actualizar el producto")
+      }
+      
+ })
 
 
 export default VistaCarrito

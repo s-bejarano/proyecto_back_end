@@ -5,6 +5,7 @@ import productManagerM from "../Mongo/productos.js"
 
 const productManager = new productManagerM()
 
+
 export default class CartManagerM {
 
 
@@ -23,8 +24,8 @@ export default class CartManagerM {
     getCart = async () => {
 
         try {
-
-            let cart = await cartModel.find()
+          //{_id: "649b10339264680582307afa"}
+          let cart = await cartModel.find().populate("products")
            return cart
         }
         catch (err) {
@@ -75,9 +76,9 @@ export default class CartManagerM {
     }
     getCartById = async (id) => {
 
-        try {
+        try { 
             // let id = req.params.id
-             let carrito = await cartModel.findOne({ _id: id})
+             let carrito = await cartModel.findOne({ _id: id}).populate("products")
              return carrito
              //res.json({result: "succes", payload:  products})
          }
@@ -85,7 +86,7 @@ export default class CartManagerM {
                  console.log("no es posible buscar el carrito")
          }
     }
-    addProductInCart = async (cart_id,product) => {
+    addProductInCart = async (cart_id,pid,product, cantidad) => {
 
         try {
             const { products } = await cartModel.findOne(
@@ -93,13 +94,16 @@ export default class CartManagerM {
               {
                 products: { $elemMatch: { _id: product._id } },
               }
-            );
+            ).populate("products");
+            //.populate("products.producto");
             if (products.length > 0) {
               await this.deleteProdinCart(cart_id, product._id);
             }
+           const cantidadT = product.incart + cantidad
+    
             return await cartModel.findByIdAndUpdate(
               { _id: cart_id },
-              { $push: { products: product } }
+              { $push: { products: product }, cantidadT}
             );
           } catch (err) {
          //     throw new Error(err?.message);
@@ -109,7 +113,23 @@ export default class CartManagerM {
     }
 
 
-    
+    UpdateCart = async (cid, pid, productUpdate) => {
+
+      try {
+      //    let {id} = req.params;
+        //  let productUpdate = req.body;
+  
+          let result = await ProductModel.updateOne({_id: cid, _id: pid}, productUpdate)
+         // res.send({status: "succes", payload: result})
+         return result
+         
+        } catch (error) {
+          console.log("no fue posible actualizar el producto")
+        }
+  
+  }
 
 }
+
+
 

@@ -8,8 +8,41 @@ export default class productManagerM {
 
     }
 
+   
+    getAll = async (pageR, limitR,categoryR, q, priceR ) => {
 
-    getAll = async (page, limit,category, q) => {
+        /*let products = await ProductModel.find()
+        return products.map(product => product.toObject())*/
+        try {
+            //let page = req.query.page
+            //let limit = req.query.
+            const limit = parseInt(limitR, 10) || 10;
+            //const skip = (page -1) * limit;
+            const page = parseInt(pageR,1) || 1;
+            const precioS = parseInt(priceR)
+            /* let query = {};
+            if(q) {
+              query = {$text: {$search: q}};
+            }
+            if(categoryR) query.categoryR = categoryR; 
+            ,{category: categoryR}*/
+            const filter = {};
+            if(categoryR) {
+                filter.category = categoryR;
+            }
+            let products = await ProductModel.paginate(filter,{limit, page, sort:{price:precioS} })
+           // let products = await ProductModel.find(query).limit(limitRecords).skip(skip).sort({precioS}).lean()
+            //paginate({category: "super"},{limit:10, page:1})
+            //paginate({page: page , limit: limit })
+           return products 
+        }
+        catch (err) {
+                console.log("no es posible traer los productos")
+        }
+
+    }
+
+    getAll2 = async (page, limit,category, q) => {
 
         /*let products = await ProductModel.find()
         return products.map(product => product.toObject())*/

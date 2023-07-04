@@ -11,29 +11,20 @@ export default class productManagerM {
    
     getAll = async (pageR, limitR,categoryR, q, priceR ) => {
 
-        /*let products = await ProductModel.find()
-        return products.map(product => product.toObject())*/
+
         try {
-            //let page = req.query.page
-            //let limit = req.query.
+      
             const limit = parseInt(limitR, 10) || 10;
             //const skip = (page -1) * limit;
             const page = parseInt(pageR,1) || 1;
             const precioS = parseInt(priceR)
-            /* let query = {};
-            if(q) {
-              query = {$text: {$search: q}};
-            }
-            if(categoryR) query.categoryR = categoryR; 
-            ,{category: categoryR}*/
+        
             const filter = {};
             if(categoryR) {
                 filter.category = categoryR;
             }
             let products = await ProductModel.paginate(filter,{limit, page, sort:{price:precioS} })
-           // let products = await ProductModel.find(query).limit(limitRecords).skip(skip).sort({precioS}).lean()
-            //paginate({category: "super"},{limit:10, page:1})
-            //paginate({page: page , limit: limit })
+         
            return products 
         }
         catch (err) {
@@ -44,11 +35,9 @@ export default class productManagerM {
 
     getAll2 = async (page, limit,category, q) => {
 
-        /*let products = await ProductModel.find()
-        return products.map(product => product.toObject())*/
+      
         try {
-            //let page = req.query.page
-            //let limit = req.query.
+            
             const limitRecords = parseInt(limit);
             const skip = (page -1) * limit;
 
@@ -58,10 +47,9 @@ export default class productManagerM {
             }
             if(category) query.category = category;
 
-          //  let products = await ProductModel.paginate({page: page , limit: limit })
+
             let products = await ProductModel.find(query).limit(limitRecords).skip(skip).lean()
-            //paginate({category: "super"},{limit:10, page:1})
-            //paginate({page: page , limit: limit })
+ 
            return products
         }
         catch (err) {
@@ -72,12 +60,11 @@ export default class productManagerM {
 
     createProduct = async(product) => {
 
-       // const {id,title, description, category, price, stock} = req.body
-        //if(!id)
+       
      
         try { 
            let result = await ProductModel.create(product)
-            //res.status(201).json({result: "succes", payload: result})
+        
             return result
         }
        
@@ -104,11 +91,10 @@ export default class productManagerM {
     Update = async (id, productUpdate) => {
 
         try {
-        //    let {id} = req.params;
-          //  let productUpdate = req.body;
+       
     
             let result = await ProductModel.updateOne({_id: id}, productUpdate)
-           // res.send({status: "succes", payload: result})
+         
            return result
            
           } catch (error) {

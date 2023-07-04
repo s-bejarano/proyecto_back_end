@@ -28,7 +28,7 @@ sesiones.post("/login", async (req,res)=> {
 
         return res.send({status:"error", error: "Usuario o contraseña incorrectos"})
     }
-   // if(!user) return res.status(400).send({status:"error", error: "Usuario o contraseña incorrectos"});
+   
 
     
     
@@ -36,7 +36,7 @@ sesiones.post("/login", async (req,res)=> {
 
 sesiones.post("/regis", (req,res)=> {
 
-
+    
     res.send({status:"success"})
  }) ;
 
@@ -45,6 +45,6 @@ sesiones.post("/logout", (req,res)=> {
     req.session.destroy()
 
     res.send({status:"success"}).redirect("/")
- })  ;
+ });
 
 export default sesiones

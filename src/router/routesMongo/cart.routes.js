@@ -43,22 +43,11 @@ VistaCarrito.post("/:id/products/:pid", async (req, res)=> {
                 console.log("carrito no encontrado")
             }
            
-                /*
-            const ArrayProducts = cart?.products;
-            const prodInCart = ArrayProducts.find(prod => prod.pid == pid);
-            cantidad = Number(cantidad);
-            const newQuantity = prodInCart.cantidad + cantidad;
-            prodInCart.cantidad = newQuantity;
-
-            ArrayProducts.map(prod =>{
-                if (prod.pid == pid) return prodInCart;
-                return prod;
-            })*/
+            
 
             const result = await carrito.addProductInCart(id,pid, product,cantidad)
             res.status(201).json({result: "succes", payload: result})
-       // const result2 = await cart.createCart(result)
-       //  res.status(201).json({result: "succes", payload: result2})
+
     }
    
     catch (err){

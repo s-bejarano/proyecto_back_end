@@ -63,12 +63,7 @@ export default class CartManagerM {
               );
               return products[0];
         
-            //1const filtro = { _id: cartid}
-          //2const filtro = { _id: cartid, id: productid}
-          //2const update = { $unset: { products: productid}}
-       //1 const update = { $pull: { products: {id: productid}}}
-         // let result = await cartModel.updateOne(filtro, update)
-          //  return result
+        
         } catch (error) {
             console.log("no se pudo eliminar el producto del carrito" + error)
         }

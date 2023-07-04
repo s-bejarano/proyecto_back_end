@@ -119,7 +119,7 @@ export default class CartManagerM {
       //    let {id} = req.params;
         //  let productUpdate = req.body;
   
-          let result = await ProductModel.updateOne({_id: cid, _id: pid}, productUpdate)
+          let result = await ProductModel.findByIdAndUpdate({_id: cid, _id: pid}, productUpdate)
          // res.send({status: "succes", payload: result})
          return result
          

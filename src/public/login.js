@@ -26,7 +26,7 @@ form.addEventListener('submit', async (event)=> {
         alert("Usuario o contraseña incorrectos")
     }
    
-    console.log(responseData);
+   
 });
 regis.addEventListener('submit', async (event)=> {
 

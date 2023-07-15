@@ -1,6 +1,9 @@
 import { query } from "express"
-import {cartModel} from "../../models/Mongo/cart.js"
+import { cartModel } from "../../models/Mongo/cart.js"
 import productManagerM from "../Mongo/productos.js"
+import { ProductModel } from "../../models/Mongo/productos.js";
+import {ticketModel} from "../../models/Mongo/ticket.js"
+import usuarioModel from "../../models/Mongo/usuarios.js";
 
 
 const productManager = new productManagerM()
@@ -9,119 +12,200 @@ const productManager = new productManagerM()
 export default class CartManagerM {
 
 
-    constructor(){
+  constructor() {
 
 
-    }
+  }
 
-    createCart = async carrito => {
+  createCart = async carrito => {
 
-        let result = await cartModel.create(carrito)
-        //res.status(201).json({result: "succes", payload: result})
-        return result
-    }
+    let result = await cartModel.create(carrito)
+    //res.status(201).json({result: "succes", payload: result})
+    return result
+  }
 
-    getCart = async () => {
+  createticket = async (cid,cart) => {
+    //  let inc = await ProductModel.findOne({_id: pid},{incart: incart})
+    //  let stock = await ProductModel.findOne({_id: pid},{stock: stock})
+    //  let totalinC =  stock - inc 
 
-        try {
-          //{_id: "649b10339264680582307afa"}
-          let cart = await cartModel.find().populate("products")
-           return cart
-        }
-        catch (err) {
-                console.log("no es posible traer el carrito")
-        }
-    }
 
-    DeleteCart = async (id) => {
 
-        try {
-            let result = await cartModel.deleteOne({_id: id})
-        return result
-        } catch (error) {
-            console.log("no fue posible eliminar el carrito")
-        }
-        
-    }
-
-    deleteProdinCart = async (cartid,productid) => {
-
-        try {
-            const { products } = await cartModel.findOne(
-                { _id: cartid },
-                {
-                  products: { $elemMatch: { id: productid } },
-                }
-              );
-
-              await cartModel.updateOne(
-                { _id: cartid },
-                {
-                  $pull: { products: { _id: productid } },
-                  //$set: { total: newTotal },
-                }
-              );
-              return products[0];
-        
-        
-        } catch (error) {
-            console.log("no se pudo eliminar el producto del carrito" + error)
-        }
-        
-    }
-    getCartById = async (id) => {
-
-        try { 
-            // let id = req.params.id
-             let carrito = await cartModel.findOne({ _id: id}).populate("products")
-             return carrito
-             //res.json({result: "succes", payload:  products})
-         }
-         catch (err) {
-                 console.log("no es posible buscar el carrito")
-         }
-    }
-    addProductInCart = async (cart_id,pid,product, cantidad) => {
-
-        try {
-            const { products } = await cartModel.findOne(
-              { _id: cart_id },
-              {
-                products: { $elemMatch: { _id: product._id } },
-              }
-            ).populate("products");
-            //.populate("products.producto");
-            if (products.length > 0) {
-              await this.deleteProdinCart(cart_id, product._id);
-            }
-           const cantidadT = product.incart + cantidad
-    
-            return await cartModel.findByIdAndUpdate(
-              { _id: cart_id },
-              { $push: { products: product }, cantidadT}
-            );
-          } catch (err) {
-         //     throw new Error(err?.message);
-            console.log("no es posible" + err)
-          }
+    /*  let productUpdate = {
+        totalinC
+      }*/
+    let carrito = await cartModel.findOne({ _id: cid })
       
+    const products = carrito.products;
+
+    try {
+     
+
+for (const productId of products) {
+
+        try {
+          let producto = await ProductModel.findOne({ _id: productId })
+        //  const cantidadEnCarrito = producto.incart
+          const total = producto.incart * producto.price
+          console.log(total)
+          // let result1 = await ProductModel.updateOne({_id: productId},{ $inc: {  stock: -cantidadEnCarrito}} )
+          let result1 = await ProductModel.updateMany(
+            { _id: { $in: products } },
+            [
+              {
+                $set: {
+                  stock: {
+                    $subtract: ["$stock", "$incart"]
+                  }
+                }
+              }
+            ]
+          );
+
+        
+
+          let compra = {
+
+            "id_carrito": cid,
+       
+            
+            "amount": total,
+            "email": ""
+          }
+    
+           let result2 = await ticketModel.create(compra)
+    
+           return result1 && result2
+
+        } catch (error) {
+          console.log("error al actualizar el stock")
+        }
+
+      }
+
+ 
+      
+      
+
+    } catch (error) {
+      console.log("error al crear el ticket"+ error)
     }
 
 
-    UpdateCart = async (cid, pid, productUpdate) => {
+    
+    //  let email = await usuarioModel.findOne({},{email: email})
 
-      try {
-      //    let {id} = req.params;
-        //  let productUpdate = req.body;
-  
-          let result = await ProductModel.findByIdAndUpdate({_id: cid, _id: pid}, productUpdate)
-         // res.send({status: "succes", payload: result})
-         return result
-         
-        } catch (error) {
-          console.log("no fue posible actualizar el producto")
+    /*  let product = {
+        totalinC,
+        email
+        } */
+
+
+
+
+  }
+
+  getCart = async () => {
+
+    try {
+      //{_id: "649b10339264680582307afa"}
+      let cart = await cartModel.find().populate("products")
+      return cart
+    }
+    catch (err) {
+      console.log("no es posible traer el carrito")
+    }
+  }
+
+  DeleteCart = async (id) => {
+
+    try {
+      let result = await cartModel.deleteOne({ _id: id })
+      return result
+    } catch (error) {
+      console.log("no fue posible eliminar el carrito")
+    }
+
+  }
+
+  deleteProdinCart = async (cartid, productid) => {
+
+    try {
+      const { products } = await cartModel.findOne(
+        { _id: cartid },
+        {
+          products: { $elemMatch: { id: productid } },
         }
-  
+      );
+
+      await cartModel.updateOne(
+        { _id: cartid },
+        {
+          $pull: { products: { _id: productid } },
+          //$set: { total: newTotal },
+        }
+      );
+      return products[0];
+
+
+    } catch (error) {
+      console.log("no se pudo eliminar el producto del carrito" + error)
+    }
+
+  }
+  getCartById = async (id) => {
+
+    try {
+      // let id = req.params.id
+      let carrito = await cartModel.findOne({ _id: id }).populate("products")
+      return carrito
+      //res.json({result: "succes", payload:  products})
+    }
+    catch (err) {
+      console.log("no es posible buscar el carrito")
+    }
+  }
+  addProductInCart = async (cart_id, pid, product, cantidad) => {
+
+    try {
+      const { products } = await cartModel.findOne(
+        { _id: cart_id },
+        {
+          products: { $elemMatch: { _id: product._id } },
+        }
+      ).populate("products");
+      //.populate("products.producto");
+      if (products.length > 0) {
+        await this.deleteProdinCart(cart_id, product._id);
+      }
+      const cantidadT = product.incart + cantidad
+
+      return await cartModel.findByIdAndUpdate(
+        { _id: cart_id },
+        { $push: { products: product }, cantidadT }
+      );
+    } catch (err) {
+      //     throw new Error(err?.message);
+      console.log("no es posible" + err)
+    }
+
+  }
+
+
+  UpdateCart = async (cid, pid, productUpdate) => {
+
+    try {
+      //    let {id} = req.params;
+      //  let productUpdate = req.body;
+
+      let result = await ProductModel.findByIdAndUpdate({ _id: cid, _id: pid }, productUpdate)
+      // res.send({status: "succes", payload: result})
+      return result
+
+    } catch (error) {
+      console.log("no fue posible actualizar el producto")
+    }
+
   }
 
 }

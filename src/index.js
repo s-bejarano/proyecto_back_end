@@ -43,6 +43,9 @@ app.use(session({
 }));
 
 
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 app.use(express.json());
@@ -73,9 +76,7 @@ app.use("/", vistas)
 app.use ("/sesiones", sesiones)
 
 
-initializePassport()
-app.use(passport.initialize())
-app.use(passport.session())
+
 
 
 const PORT = config.PORT;

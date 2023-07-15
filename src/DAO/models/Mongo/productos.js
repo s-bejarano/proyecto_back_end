@@ -10,7 +10,8 @@ const productSchema = new mongoose.Schema({
     category: { type: String, ref: "Category", require: true },
     price: { type: Number, require: true },
     stock: { type: Number, require: true },
-    incart: {type: Number, default: 0 }
+    incart: {type: Number, default: 0 },
+    total: {type: Number, default: 0}
    
 })
 productSchema.plugin(mongoosePaginate);

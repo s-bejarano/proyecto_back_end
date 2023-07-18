@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import generateProducts from "../../utils/productosMock.utils.js";
+import { authorization } from "../../config/passport.config.js";
 
 const VistaMock = Router()
 

@@ -2,6 +2,8 @@ import { Router } from "express";
 import CartManagerM from "../../DAO/DBManagers/Mongo/cart.js";
 import { ObjectId } from "mongoose";
 import productManagerM from "../../DAO/DBManagers/Mongo/productos.js"
+import { authorization } from "../../config/passport.config.js";
+
 const carrito = new CartManagerM();
 const producto = new productManagerM();
 const VistaCarrito = Router()
@@ -26,7 +28,7 @@ VistaCarrito.post("/", async (req, res)=> {
     }
 })
 
-VistaCarrito.post("/:id/products/:pid", async (req, res)=> {
+VistaCarrito.post("/:id/products/:pid",  authorization('user'), async (req, res)=> {
 
     
     //if(!id) POST PRODUCTO EN CARRITO
@@ -114,12 +116,13 @@ VistaCarrito.put("/:cid/products/:pid", async (req, res)=> {
 VistaCarrito.post("/:cid/purchase", async (req,res)=> {
     let c_id = req.params.cid;
     const cart = await carrito.getCartById(c_id);
+   const email =  req.session.user
    // let detail = req.body;
 
     try {
         
 
-        let result = await carrito.createticket(c_id)
+        let result = await carrito.createticket(c_id,email)
         res.send({status:"succes",payload: result})
     } catch (error) {
         

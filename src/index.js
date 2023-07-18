@@ -24,14 +24,17 @@ import passport from "passport"
 import config from "./config/config.js";
 import morgan from "morgan"
 import VistaMock from "./router/routesMongo/productosMock.routes.js"
-
+import errorHandler from "./middlewars.erros/index.js"
 
 const app = express();
+
+
 
 const server = http.createServer(app);
 const mensajeM = new MensajesManagerM();
 const io = new Server(server);
 const URL = config.MONGO_URL
+
 
  mongoose.connect(URL);
 
@@ -46,9 +49,10 @@ app.use(session({
 }));
 
 
-initializePassport()
-app.use(passport.initialize())
-app.use(passport.session())
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 
 app.use(express.json());
@@ -80,6 +84,7 @@ app.use("/", vistas)
 app.use ("/sesiones", sesiones)
 app.use("/mocking", VistaMock)
 
+app.use(errorHandler)
 
 
 

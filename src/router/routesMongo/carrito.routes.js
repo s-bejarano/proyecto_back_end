@@ -1,13 +1,13 @@
 import { Router } from "express";
 
 import CartManagerM from "../../DAO/DBManagers/Mongo/cart.js"
-
+import { authorization } from "../../config/passport.config.js";
 
 
 const carrito = new CartManagerM();
 const carritoVista = Router()
 
-carritoVista.get("/:id", async (req,res) =>{
+carritoVista.get("/:id",  async (req,res) =>{
     let id = req.params.id
     let  carritoT = await carrito.getCartById(id)
     res.render("cart", {

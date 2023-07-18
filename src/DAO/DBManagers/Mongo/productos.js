@@ -63,9 +63,15 @@ export default class productManagerM {
        
      
         try { 
-           let result = await ProductModel.create(product)
-        
-            return result
+
+           
+
+                let result = await ProductModel.create(product)
+            
+                return result
+              
+            
+          
         }
        
         catch (err){

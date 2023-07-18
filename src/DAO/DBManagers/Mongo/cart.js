@@ -24,16 +24,8 @@ export default class CartManagerM {
     return result
   }
 
-  createticket = async (cid,cart) => {
-    //  let inc = await ProductModel.findOne({_id: pid},{incart: incart})
-    //  let stock = await ProductModel.findOne({_id: pid},{stock: stock})
-    //  let totalinC =  stock - inc 
-
-
-
-    /*  let productUpdate = {
-        totalinC
-      }*/
+  createticket = async (cid,email) => {
+   
     let carrito = await cartModel.findOne({ _id: cid })
       
     const products = carrito.products;
@@ -49,33 +41,40 @@ for (const productId of products) {
           const total = producto.incart * producto.price
           console.log(total)
           // let result1 = await ProductModel.updateOne({_id: productId},{ $inc: {  stock: -cantidadEnCarrito}} )
-          let result1 = await ProductModel.updateMany(
-            { _id: { $in: products } },
-            [
-              {
-                $set: {
-                  stock: {
-                    $subtract: ["$stock", "$incart"]
+
+          if (producto.stock > producto.incart) {
+
+            let result1 = await ProductModel.updateMany(
+              { _id: { $in: products } },
+              [
+                {
+                  $set: {
+                    stock: {
+                      $subtract: ["$stock", "$incart"]
+                    }
                   }
                 }
-              }
-            ]
-          );
-
-        
-
-          let compra = {
-
-            "id_carrito": cid,
-       
-            
-            "amount": total,
-            "email": ""
+              ]
+            );
+  
+          
+  
+            let compra = {
+  
+              "id_carrito": cid,
+         
+              
+              "amount": total,
+              "email": email
+            }
+      
+             let result2 = await ticketModel.create(compra)
+      
+             return result1 && result2
+          } else {
+            console.log("stock insuficiente")
           }
-    
-           let result2 = await ticketModel.create(compra)
-    
-           return result1 && result2
+         
 
         } catch (error) {
           console.log("error al actualizar el stock")
@@ -90,17 +89,6 @@ for (const productId of products) {
     } catch (error) {
       console.log("error al crear el ticket"+ error)
     }
-
-
-    
-    //  let email = await usuarioModel.findOne({},{email: email})
-
-    /*  let product = {
-        totalinC,
-        email
-        } */
-
-
 
 
   }

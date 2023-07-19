@@ -4,6 +4,7 @@ import productManagerM from "../Mongo/productos.js"
 import { ProductModel } from "../../models/Mongo/productos.js";
 import {ticketModel} from "../../models/Mongo/ticket.js"
 import usuarioModel from "../../models/Mongo/usuarios.js";
+import logger from "../../../utils/logger/logger.js";
 
 
 const productManager = new productManagerM()
@@ -19,9 +20,16 @@ export default class CartManagerM {
 
   createCart = async carrito => {
 
-    let result = await cartModel.create(carrito)
-    //res.status(201).json({result: "succes", payload: result})
-    return result
+    try {
+      let result = await cartModel.create(carrito)
+      //res.status(201).json({result: "succes", payload: result})
+      logger.info("carrito creado con exito")
+      return result
+    } catch (error) {
+      logger.debug(error)
+      logger.error("no es posible crear el carrito")
+    }
+   
   }
 
   createticket = async (cid,email) => {
@@ -69,15 +77,16 @@ for (const productId of products) {
             }
       
              let result2 = await ticketModel.create(compra)
-      
+             logger.info("ticket creado con exito")
              return result1 && result2
           } else {
-            console.log("stock insuficiente")
+            logger.warning("Stock insuficiente")
           }
          
 
         } catch (error) {
-          console.log("error al actualizar el stock")
+          logger.warning("No es posible actualizar el stock")
+          logger.debug(error)
         }
 
       }
@@ -87,7 +96,8 @@ for (const productId of products) {
       
 
     } catch (error) {
-      console.log("error al crear el ticket"+ error)
+      logger.error("error al crear el ticket en la base de datos")
+      logger.debug(error)
     }
 
 
@@ -98,10 +108,12 @@ for (const productId of products) {
     try {
       //{_id: "649b10339264680582307afa"}
       let cart = await cartModel.find().populate("products")
-      return cart
+       logger.info("Carritos  totales consultados")
+      return cart 
     }
     catch (err) {
-      console.log("no es posible traer el carrito")
+      logger.error("no es posible consultar los carritos en la base de datos")
+      logger.debug(err)
     }
   }
 
@@ -109,9 +121,11 @@ for (const productId of products) {
 
     try {
       let result = await cartModel.deleteOne({ _id: id })
+      logger.info("Carrito eliminado con exito")
       return result
     } catch (error) {
-      console.log("no fue posible eliminar el carrito")
+      logger.error("no es posible eliminar los carritos")
+      logger.debug(error)
     }
 
   }
@@ -133,11 +147,14 @@ for (const productId of products) {
           //$set: { total: newTotal },
         }
       );
+      logger.info("producto eliminado de carrito con exito")
+
       return products[0];
 
 
     } catch (error) {
-      console.log("no se pudo eliminar el producto del carrito" + error)
+      logger.debug(error)
+      logger.error("no es posible eliminar el producto del carrito")
     }
 
   }
@@ -146,11 +163,14 @@ for (const productId of products) {
     try {
       // let id = req.params.id
       let carrito = await cartModel.findOne({ _id: id }).populate("products")
+      logger.info("carrito especifico consultado con exito")
       return carrito
       //res.json({result: "succes", payload:  products})
     }
     catch (err) {
-      console.log("no es posible buscar el carrito")
+ 
+    logger.debug(err)
+    logger.error("no es posible buscar el carrito especifico")
     }
   }
   addProductInCart = async (cart_id, pid, product, cantidad) => {
@@ -167,14 +187,15 @@ for (const productId of products) {
         await this.deleteProdinCart(cart_id, product._id);
       }
       const cantidadT = product.incart + cantidad
-
+      logger.info("producto añadido al carrito con exito")
       return await cartModel.findByIdAndUpdate(
         { _id: cart_id },
         { $push: { products: product }, cantidadT }
       );
     } catch (err) {
       //     throw new Error(err?.message);
-      console.log("no es posible" + err)
+      logger.debug(err)
+      logger.error("no es posible agregar el producto al carrito")
     }
 
   }
@@ -188,10 +209,13 @@ for (const productId of products) {
 
       let result = await ProductModel.findByIdAndUpdate({ _id: cid, _id: pid }, productUpdate)
       // res.send({status: "succes", payload: result})
+      logger.info("carrito actualizado con exito")
       return result
 
     } catch (error) {
-      console.log("no fue posible actualizar el producto")
+      
+      logger.debug(error)
+      logger.error("erro al actualizar el carrito")
     }
 
   }

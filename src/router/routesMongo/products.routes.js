@@ -15,7 +15,7 @@ const VistaRealTimeR = Router()
 
 
 
-VistaRealTimeR.get("/", async (req, res)=> {
+VistaRealTimeR.get("/",/*authorization('user'),*/ async (req, res)=> {
 
     try {
         //let { limit , page , category, q } = req.query;
@@ -58,7 +58,7 @@ VistaRealTimeR.get("/:id", async (req, res)=> {
 
 
 
-VistaRealTimeR.post("/",authorization('admin') ,async (req, res, next)=> {
+VistaRealTimeR.post("/",/*authorization('admin') ,*/async (req, res, next)=> {
     try {
         const {id,title, description, category, price, stock} = req.body
         //if(!id)
@@ -99,7 +99,7 @@ VistaRealTimeR.post("/",authorization('admin') ,async (req, res, next)=> {
 })
 
 
-VistaRealTimeR.put("/:id", authorization("admin"),async (req, res)=> {
+VistaRealTimeR.put("/:id",/* authorization("admin"),*/async (req, res)=> {
 
     try {
         let {id} = req.params;
@@ -116,7 +116,7 @@ VistaRealTimeR.put("/:id", authorization("admin"),async (req, res)=> {
       
  })
 
- VistaRealTimeR.delete("/:id", authorization('admin'),async (req, res)=> {
+ VistaRealTimeR.delete("/:id",/* authorization('admin'),*/async (req, res)=> {
 
         try {
             let {id} = req.params;

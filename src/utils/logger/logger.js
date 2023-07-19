@@ -38,7 +38,8 @@ const logger = winston.createLogger({
     new winston.transports.Console(), // Imprimir mensajes en la consola
     new winston.transports.File({
          filename: "app.log" ,
-        level: "info"}), // Guardar mensajes en un archivo "app.log"
+        level: "info" 
+    }), // Guardar mensajes en un archivo "app.log"
     new winston.transports.File({ 
       filename: "errors.log",
       level: "error", // Transporte específico para logs de nivel "error" y "fatal"

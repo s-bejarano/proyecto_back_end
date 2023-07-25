@@ -17,6 +17,7 @@ vistas.get("/perfil", (req,res)=> {
 
     res.render("perfil", {
         user: req.session.user
+        
     } )
 })
 

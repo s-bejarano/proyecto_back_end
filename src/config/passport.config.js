@@ -2,8 +2,42 @@ import passport from "passport";
 import local from "passport-local";
 import usuarioModel from "../DAO/models/Mongo/usuarios.js";
 import { createHash, isValidPassword } from "../utils.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
 
 const LocalStrategy = local.Strategy;
+
+
+// Middleware de autenticación basada en token
+
+// Función para comparar la contraseña proporcionada por el usuario con la almacenada en la base de datos
+/*export const isValidPassword = async (user, password) => {
+  try {
+    // Compara la contraseña proporcionada con la contraseña almacenada utilizando bcrypt
+    return await bcrypt.compare(password, user.password);
+  } catch (error) {
+    console.log("Error al comparar contraseñas", error);
+    return false;
+  }
+};
+ */
+
+export const authenticateToken = (req, res, next) => {
+  const token = req.headers.authorization && req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).send({ status: "error", error: "Token no proporcionado" });
+  }
+
+  jwt.verify(token, "mi_secreto", (err, user) => {
+    if (err) {
+      return res.status(403).send({ status: "error", error: "Token inválido" });
+    }
+    req.user = user;
+    next();
+  });
+};
+
 
 const initializePassport = () => {
   passport.use(

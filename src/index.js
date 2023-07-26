@@ -26,6 +26,8 @@ import morgan from "morgan"
 import VistaMock from "./router/routesMongo/productosMock.routes.js"
 import errorHandler from "./middlewars.erros/index.js"
 import usuarios from "./router/routesMongo/usuarios.routes.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const app = express();
 
@@ -49,6 +51,21 @@ app.use(session({
     saveUninitialized: false,
 }));
 
+
+const swaggerOptions = {
+    definition: {
+      openapi: "3.0.1",
+      info: {
+        title: "Documentación de AdoptMe!!!",
+        description: "La documentación de los endpoints",
+      },
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`],
+  };
+
+
+  const specs = swaggerJSDoc(swaggerOptions);
+  app.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 initializePassport();
 app.use(passport.initialize());

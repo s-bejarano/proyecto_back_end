@@ -15,29 +15,24 @@ const VistaRealTimeR = Router()
 
 
 
-VistaRealTimeR.get("/",/*authorization('user'),*/ async (req, res)=> {
-
+VistaRealTimeR.get("/", async (req, res) => {
     try {
-        //let { limit , page , category, q } = req.query;
-        let page = req.query.page;
-        let limit = req.query.limit
-        let category = req.query.category
-        let q = req.query.q
-        let price = req.query.price
-
-
-        let products = await producto.getAll(page ,limit, category, q, price)
-        logger.http("ruta accesible")
-        res.json({result: "succes", payload:  products})
+      let page = req.query.page;
+      let limit = req.query.limit;
+      let category = req.query.category;
+      let q = req.query.q;
+      let price = req.query.price;
+  
+      let products = await producto.getAll(page, limit, category, q, price);
+      logger.http("ruta accesible");
+      res.json({ success: true, payload: products });
+    } catch (err) {
+      logger.fatal("no es posible acceder a la ruta");
+      logger.debug(err);
+      res.status(500).json({ success: false, error: "Error interno del servidor" });
     }
-    catch (err) {
-        logger.fatal("no es posible acceder a la ruta")
-        logger.debug(err)
-    }
-
-})
-
-
+  });
+  
 
 
 VistaRealTimeR.get("/:id", async (req, res)=> {
@@ -46,7 +41,7 @@ VistaRealTimeR.get("/:id", async (req, res)=> {
         let id = req.params.id
         let products = await producto.getByYd(id)
         logger.http("ruta accesible")
-        res.json({result: "succes", payload:  products})
+        res.json({result: "success", payload:  products})
     }
     catch (err) {
         logger.fatal("no es posible acceder a la ruta")
@@ -82,7 +77,7 @@ VistaRealTimeR.post("/",/*authorization('admin') ,*/async (req, res, next)=> {
                      stock
                  })
                  logger.http("ruta accesible")
-                 res.status(201).json({result: "succes", payload: result})
+                 res.status(201).json({result: "success", payload: result})
              }
             
              catch (err){
@@ -107,7 +102,7 @@ VistaRealTimeR.put("/:id",/* authorization("admin"),*/async (req, res)=> {
 
         let result = await producto.Update({_id: id}, productUpdate)
         logger.http("ruta accesible")
-        res.send({status: "succes", payload: result})
+        res.send({success: true, payload: result})
        
       } catch (error) {
         logger.fatal("no es posible acceder a la ruta")

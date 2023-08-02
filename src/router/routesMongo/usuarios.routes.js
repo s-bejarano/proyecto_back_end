@@ -34,7 +34,7 @@ usuarios.put("/premium/:uid",/* authorization("admin"),*/async (req, res)=> {
  
  const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, "uploads/documents");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);

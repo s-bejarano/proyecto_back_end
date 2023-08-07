@@ -20,6 +20,8 @@ export default class UsuarioMangerM {
 
     }
 
+    
+
 
     Update = async (id, userUpdate) => {
 

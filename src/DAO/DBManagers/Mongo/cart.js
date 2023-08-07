@@ -73,7 +73,7 @@ for (const productId of products) {
          
               
               "amount": total,
-              "email": email
+              "email": ""
             }
       
              let result2 = await ticketModel.create(compra)
@@ -85,8 +85,10 @@ for (const productId of products) {
          
 
         } catch (error) {
-          logger.warning("No es posible actualizar el stock")
+          console.log(error)
           logger.debug(error)
+          logger.warning("No es posible actualizar el stock")
+          
         }
 
       }

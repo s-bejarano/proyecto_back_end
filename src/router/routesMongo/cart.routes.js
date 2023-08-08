@@ -17,10 +17,10 @@ VistaCarrito.post("/", async (req, res) => {
     //if(!id)
     try {
 
-        const { id } = req.body
+        //const { id } = req.body
         let result = {
-            id,
-            products: req.body
+           // id,
+          //  products: req.body
         }
         const result2 = await carrito.createCart(result)
         logger.http("ruta accesible")

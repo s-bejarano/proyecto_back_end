@@ -26,6 +26,7 @@ export default class CartManagerM {
       logger.info("carrito creado con exito")
       return result
     } catch (error) {
+      console.log(error)
       logger.debug(error)
       logger.error("no es posible crear el carrito")
     }
@@ -131,7 +132,6 @@ for (const productId of products) {
     }
 
   }
-
   deleteProdinCart = async (cartid, productid) => {
 
     try {
@@ -144,7 +144,7 @@ for (const productId of products) {
 
       await cartModel.updateOne(
         { _id: cartid },
-        {
+        {                                                                                                                                                                                                                                                    
           $pull: { products: { _id: productid } },
           //$set: { total: newTotal },
         }
@@ -160,6 +160,7 @@ for (const productId of products) {
     }
 
   }
+  
   getCartById = async (id) => {
 
     try {

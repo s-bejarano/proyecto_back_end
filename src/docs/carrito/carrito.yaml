@@ -21,6 +21,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Carrito"
+       
     get:
       summary: Obtiene todos los carritos
       tags:
@@ -72,6 +73,36 @@ paths:
               schema:
                 $ref: "#/components/schemas/Carrito"
   /carrito/{id}/products/{pid}:
+    post:
+      summary: Añade un un nuevo producto al carrito
+      tags:
+        - Carrito
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID del carrito al que se quiere agregar el producto
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: ID del producto que se quiere agregar al carrito  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Carrito"
+      responses:
+        "201":
+          description: Carrito creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Carrito"           
     delete:
       summary: Elimina un producto del carrito por su ID
       tags:

@@ -140,12 +140,12 @@ for (const productId of products) {
       );
       
       logger.info("Producto eliminado del carrito con éxito");
-      return true; // O cualquier otro valor que indique éxito
+      return true; 
   
     } catch (error) {
       logger.debug(error);
       logger.error("No es posible eliminar el producto del carrito");
-      return false; // O cualquier otro valor que indique error
+      return false; 
     }
   };
   

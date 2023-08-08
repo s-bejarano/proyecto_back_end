@@ -138,7 +138,7 @@ for (const productId of products) {
       const { products } = await cartModel.findOne(
         { _id: cartid },
         {
-          products: { $elemMatch: { id: productid } },
+          products: { $elemMatch: { _id: productid } },
         }
       );
 

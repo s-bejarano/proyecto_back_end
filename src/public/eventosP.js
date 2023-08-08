@@ -5,7 +5,7 @@ btnsAgregar.forEach((btnAgregar) => {
   btnAgregar.addEventListener('click', async () => {
     const productId = btnAgregar.dataset.productId;
     const idp = document.getElementById(`idp${productId}`).textContent;
-    const idc = "649cd48c8722f190e45974da";
+    const idc = "64d28cce5acfa7b4269be9cf";
 
     try {
       // Realizar la petición POST para agregar el producto al carrito

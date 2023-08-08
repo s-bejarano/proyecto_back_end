@@ -133,33 +133,22 @@ for (const productId of products) {
 
   }
   deleteProdinCart = async (cartid, productid) => {
-
     try {
-      const { products } = await cartModel.findOne(
-        { _id: cartid },
-        {
-          products: { $elemMatch: { _id: productid } },
-        }
-      );
-
       await cartModel.updateOne(
         { _id: cartid },
-        {                                                                                                                                                                                                                                                    
-          $pull: { products: { _id: productid } },
-          //$set: { total: newTotal },
-        }
+        { $pull: { products: productid } }
       );
-      logger.info("producto eliminado de carrito con exito")
-
-      return products[0];
-
-
+      
+      logger.info("Producto eliminado del carrito con éxito");
+      return true; // O cualquier otro valor que indique éxito
+  
     } catch (error) {
-      logger.debug(error)
-      logger.error("no es posible eliminar el producto del carrito")
+      logger.debug(error);
+      logger.error("No es posible eliminar el producto del carrito");
+      return false; // O cualquier otro valor que indique error
     }
-
-  }
+  };
+  
   
   getCartById = async (id) => {
 
